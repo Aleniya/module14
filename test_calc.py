@@ -1,30 +1,72 @@
-import unittest
-from calc import calc_me
+'''
+Calcultor v. 0.4
+'''
 
-class CalcTest(unittest.TestCase):
-    def test_add(self):
-        "Сложение"
-        self.assertEqual(calc_me(1, 2,"+"), 3)
-        
-    def test_sub(self):
-        "Вычитание"
-        self.assertEqual(calc_me(4, 2,"-"), 2)
-        
-    def test_mul(self):
-        "Умножение"
-        self.assertEqual(calc_me(12345679, 8,"*"), 98765432)
-        
-    def test_div(self):
-        "Деление"
-        self.assertEqual(calc_me(111111111, 9,"/"), 12345679)
+def input_number():
+    num = input("Введите число: ")
+    if num == '':
+        return None
+    # просто попробуй
+    try:
+        # преобразовать переменную num в флоат
+        num = float(num)
+    # если вышла ошибка
+    except ValueError:
+        # можно вернуть как есть
+        num = num
+    return num
 
-    def test_div_neg(self):
-        """Негативный, деление на ноль"""
-        self.assertEqual(calc_me(12, 0,"/"), 'ERROR: Divide by zero!')
+def input_oper():
+    oper = input("Операция(*, /, +, -, ^): ")
 
-    def test_oper_neg(self):
-        """Негативный, возведение в степень"""
-        self.assertEqual(calc_me(4, 2,"^"), 'ERROR: Uknow operation')
+    if oper == '':
+        oper = None
 
+    return oper
+
+def calc_me(x=None,y=None, oper=None):
+    # если x не присвоили значение - возвращаем ошибку
+    if x is None:
+        return "ERROR: send me Number1"
+    # если y не присвоили значение - возвращаем ошибку
+    if y is None:
+        return "ERROR: send me Number1"
+    # если x или y  не входит в типы int, float - возвращаем ошибку
+    if (not isinstance(x, (int, float))) or (not isinstance(y, (int, float))):
+        return "ERROR: now it is does not supported"
+
+    if oper == '*':
+        return x * y
+    elif oper == '/':
+        # если делитель == 0 то возвращаем ошибку
+        if y == 0:
+            return "ERROR: Divide by zero!"
+        else:
+            return x / y
+    elif oper == '+':
+        return x + y
+    elif oper == '-':
+        return x - y
+    elif oper == '^' or oper == '**':
+        return x ** y
+    else:
+        return "ERROR: Uknow operation"
+
+def body():
+    # результат работы функции input_number запишется в переменную number1
+    number1 = input_number()
+    # результат работы функции input_oper запишется в переменную oper
+    oper = input_oper()
+    # результат работы функции input_number запишется в переменную number2
+    number2 = input_number()
+    # вызываем функцию calc_me с переменными которые мы ранее получили 
+    # результат запишем в переменную result
+    result = calc_me(number1,number2, oper)
+    # выводим результат для пользователя
+    print(result)
+
+# это специальное служебное условие Питон
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    # оно говорит, что если мы вызвали этот файл в консоли 
+    # то надо выполнить функцию body
+    body()
